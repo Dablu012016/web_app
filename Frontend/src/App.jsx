@@ -9,6 +9,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom"
 import Navbar from './components/Navbar'
 import Error404 from './pages/Error404'
 import Footer from './components/Footer'
+import Logout from './pages/Logout'
 
 function App() {
 
@@ -24,6 +25,7 @@ function App() {
           <Route path='/register' element={<Register />} />
           <Route path='/login' element={<Login />} />
           <Route path='*' element={<Error404/>} />
+          <Route path="/logout" element={<Logout />} />
         </Routes>
         <Footer />
       </BrowserRouter>

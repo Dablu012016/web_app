@@ -1,12 +1,24 @@
 import { useState } from "react";
+import { useAuth } from "../store/auth";
 
-
-const Contact = () => {
-  const [contact, setContact] = useState({
-    username: "",
+const defaultContactFormData = {
+   username: "",
     email: "",
     message: "",
-  });
+}
+const Contact = () => {
+  const [contact, setContact] = useState({ defaultContactFormData});
+  const [userData, setUserData] = useState(true);
+  const { user } = useAuth();
+
+  if (userData && user) {
+    setContact({
+      username: user.username,
+      email: user.email,
+      message: "",
+    });
+    setUserData(false);
+  }
 
   const handleInput = (e) => {
     const name = e.target.name;
@@ -18,9 +30,28 @@ const Contact = () => {
     });
   };
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
-    console.log(contact);
+    try {
+      const response = await fetch("https://web-app-8sy8.onrender.com/api/form/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify(contact)
+
+      });
+
+      if (response.ok) {
+        setContact(defaultContactFormData);
+        alert("message sent successfully");
+      }
+
+    } catch (error) {
+      console.log(error);
+
+    }
 
   }
 

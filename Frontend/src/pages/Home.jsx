@@ -2,6 +2,7 @@ import { NavLink } from "react-router-dom";
 
 const Home = () => {
   return (
+
     <>
       <section className='bg-neutral-900 text-white'>
         <div className='max-w-3/4 mx-auto '>

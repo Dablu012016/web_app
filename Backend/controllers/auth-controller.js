@@ -13,7 +13,7 @@ const home = async (req, res) => {
 
 // Registration logic
 
-const register = async (req, res) => {
+const register = async (req, res, next) => {
     
     try {
         const { username, email, phone, password } = req.body;
@@ -21,7 +21,7 @@ const register = async (req, res) => {
         const userExist = await User.findOne({ email });
 
         if (userExist) {
-            return res.status(400).send("Email Already Exist");
+            return res.status(400).json({success:false ,message: "Email Already Exist"});
         }
 
         // hash password
@@ -37,13 +37,14 @@ const register = async (req, res) => {
 
         });
 
-        res.status(200).send({
+        res.status(201).send({
             msg: "registration successfull",
             token: await userCreated.generateToken(), userId: userCreated._id.toString()
         });
 
     } catch (error) {
-        res.status(500).json("internal server error");
+        // res.status(500).json("internal server error");
+        next(error)
     }
 }
 
@@ -76,4 +77,17 @@ const login = async (req, res) => {
 }
 
 
-module.exports = { home, register, login };
+// To send User Data
+
+const user = async (req, res) =>{
+    try {
+        const userData = req.user;
+        // console.log(userData);
+        
+       return  res.status(200).json({userData});
+    } catch (error) {
+        console.log(`error from the user Route ${error}`);      
+    }
+}
+
+module.exports = { home, register, login, user };

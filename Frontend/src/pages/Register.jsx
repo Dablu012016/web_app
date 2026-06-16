@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from "axios";
-
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../store/auth';
 
 const Register = () => {
   const [user, setUser] = useState({
@@ -9,6 +10,9 @@ const Register = () => {
     phone: "",
     password: "",
   });
+
+  const navigate = useNavigate();
+  const { storeTokenInLS } = useAuth();
 
   const handleInput = (e) => {
     let name = e.target.name;
@@ -26,17 +30,19 @@ const Register = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/auth/register",
-        user
+        "https://web-app-8sy8.onrender.com/api/auth/register",
+        user,
+
       );
 
+
       const data = response.data;
-     
-      localStorage.setItem("token", data.token);
+      console.log(data);
 
       alert("Registration Successful");
 
-   
+      storeTokenInLS(data.token);
+
       setUser({
         username: "",
         email: "",
@@ -44,13 +50,25 @@ const Register = () => {
         password: "",
       });
 
-    } catch (error) {
+      navigate("/login");
 
-      alert(
-        error.response?.data?.message ||
-        error.response?.data?.errors?.[0]?.message ||
-        "Registration failed "
-      );
+
+    } catch (error) {
+      // console.log("error", error.response?.data);
+
+      // Handle Zod errors
+      if (error.response?.data?.errors) {
+        alert(error.response.data.errors[0].message);
+      }
+
+      //  Handle custom message like Email already exists
+      else if (error.response?.data?.message) {
+        alert(error.response.data.message);
+      }
+
+      else {
+        alert("Registration failed");
+      }
     }
   };
 

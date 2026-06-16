@@ -1,41 +1,50 @@
 import { useState } from 'react';
 import axios from "axios"
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../store/auth';
 
 const Login = () => {
   const [user, setUser] = useState({
-      email: "",
-      password: "",
-    });
-  
-    const handleInput = (e) => {
-      let name = e.target.name;
-      let value = e.target.value;
-  
-      setUser({
-        ...user,
-        [name]: value,
-      })
-    };
-  
-    const handleFormSubmit = async(e) => {
-      e.preventDefault();
-      try {
+    email: "",
+    password: "",
+  });
+
+  const navigate = useNavigate();
+
+  const { storeTokenInLS } = useAuth();
+
+  const handleInput = (e) => {
+    let name = e.target.name;
+    let value = e.target.value;
+
+    setUser({
+      ...user,
+      [name]: value,
+    })
+  };
+
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    try {
       const response = await axios.post(
-        "http://localhost:5000/api/auth/login",
+        "https://web-app-8sy8.onrender.com/api/auth/login",
         user
       );
 
-      const data = response.data;
-     
-      localStorage.setItem("token", data.token);
+      // console.log(data.token)
 
       alert("Login Successful");
 
-   
+      const data = response.data;
+
+      storeTokenInLS(data.token);
+
       setUser({
         email: "",
         password: "",
       });
+
+      navigate("/");
 
     } catch (error) {
 
@@ -45,7 +54,7 @@ const Login = () => {
         "login failed "
       );
     }
-    };
+  };
   return (
     <>
       <section className='bg-neutral-900 text-white md:h-235'>
@@ -61,7 +70,7 @@ const Login = () => {
               <br />
 
               <form onSubmit={handleFormSubmit} className='flex flex-col gap-6 text-2xl font-medium'>
-              
+
                 <div>
                   <label htmlFor="email">Email: </label>
                   <input
@@ -76,7 +85,7 @@ const Login = () => {
                     className=' w-full mt-3  border border-black  py-3 px-2 rounded-md bg-neutral-600'
                   />
                 </div>
-              
+
                 <div>
                   <label htmlFor="password">Password: </label>
                   <input

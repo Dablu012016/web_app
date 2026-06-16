@@ -1,13 +1,25 @@
+import { useState } from "react";
 import { NavLink } from "react-router-dom";
+import { useAuth } from "../store/auth";
 
 const About = () => {
+  const [userData, setUserData] = useState(true);
+  const [name, setName] = useState("");
+    const { user } = useAuth();
+  
+    if (userData && user) {
+      setName({
+        username: user.username,
+      });
+      setUserData(false)
+    }
   return (
     <>
       <section className="bg-neutral-900 text-white md:h-235 pb-4">
         <div className="max-w-3/4 mx-auto">
           <div className="grid md:grid-cols-2">
             <div className="flex flex-col gap-8 justify-center md:w-3xl px-4">
-              <small className='font-medium md:text-2xl text-1xl mb-0 mt-5 text-gray-300'>Welcome, WeAnalyz Technical</small>
+              <p className='font-medium md:text-2xl text-1xl mb-0 mt-5 text-gray-300'>Welcome, WeAnalyz Technical <span className="text-5xl capitalize text-blue-700 font-medium"> {name.username} </span></p>
               <h1 className='text-6xl font-bold'>Why Choose Us?</h1>
               <p className='text-1xl font-normal text-gray-400'>Expertise: Our team consist of experienced IT professionals who are passionate about staying up-to-date with the latest industry trends.</p>
               <p className='text-1xl font-normal text-gray-400'>Customerization: We understand that every bussiness is unique. That`s why we create solutions that are tallord to your specific needs and gols.</p>

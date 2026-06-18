@@ -7,7 +7,7 @@ export const AuthProvider = ({ children }) => {
 
     const [token, setToken] = useState(localStorage.getItem("token"));
     const [user, setUser] = useState("");
-    const [services, setServices] = useState("");
+    const [services, setServices] = useState([]);
 
     const storeTokenInLS = (serverToken) => {
         return localStorage.setItem("token", serverToken);
@@ -28,7 +28,7 @@ export const AuthProvider = ({ children }) => {
 
     const userAuthentucation = async () => {
         try {
-            const response = await fetch("http://localhost:5000/api/auth/user", {
+            const response = await fetch("https://web-app-8sy8.onrender.com/api/auth/user", {
                 method: "GET",
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -50,13 +50,13 @@ export const AuthProvider = ({ children }) => {
     const getServices = async () => {
         try {
           
-            const response = await fetch("http://localhost:5000/api/data/service", {
+            const response = await fetch("https://web-app-8sy8.onrender.com/api/data/service", {
                 method:"GET",
             });
 
             if (response.ok) {
                 const data = await response.json();
-                // console.log(data.msg);
+                console.log(data.msg);
                 setServices(data.msg);         
             }
         } catch (error) {

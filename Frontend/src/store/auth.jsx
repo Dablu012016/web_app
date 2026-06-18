@@ -11,6 +11,7 @@ export const AuthProvider = ({ children }) => {
 
     const storeTokenInLS = (serverToken) => {
         return localStorage.setItem("token", serverToken);
+        setToken(serverToken);
     };
 
     // tacking the logout functionality
@@ -49,15 +50,15 @@ export const AuthProvider = ({ children }) => {
 
     const getServices = async () => {
         try {
-          
+
             const response = await fetch("https://web-app-8sy8.onrender.com/api/data/service", {
-                method:"GET",
+                method: "GET",
             });
 
             if (response.ok) {
                 const data = await response.json();
                 console.log(data.msg);
-                setServices(data.msg);         
+                setServices(data.msg);
             }
         } catch (error) {
             console.log("Error fetching server data");
@@ -67,8 +68,10 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         getServices();
-        userAuthentucation();
-    }, []);
+        if (token) {
+            userAuthentucation();
+        }
+    }, [token]);
 
     return (
         <AuthContext.Provider value={{ isLoggedIn, storeTokenInLS, logoutUser, user, services }}>

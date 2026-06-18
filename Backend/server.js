@@ -12,8 +12,7 @@ const corsOptions = {
   origin: [
     "http://localhost:5173",
     "https://web-app-8sy8.onrender.com",
-    "https://web-iv76rkl43-dablu-kumars-projects-a9f604e2.vercel.app"
-
+    "https://web-qxfddj7w9-dablu-kumars-projects-a9f604e2.vercel.app/"
   ],
   methods: "GET, POST, PUT, DELETE, PATCH, HEAD",
   credentials: true,
